@@ -1,4 +1,4 @@
-package com.kulk.ani.compose.practice.ui
+package com.kulk.ani.compose.practice.simple_todo
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,21 +9,32 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 
 @Composable
-fun SimpleToDoListScreen(
+fun TodoScreen(modifier: Modifier) {
+    val viewModel = viewModel<TodoViewModel>()
+    val state by viewModel.viewState.collectAsStateWithLifecycle()
+    SimpleToDoList(modifier, state) { viewModel.updateSelection(it) }
+}
+
+@Composable
+fun SimpleToDoList(
     modifier: Modifier,
     toDo: ToDo,
     onCheckedListener: (Boolean) -> Unit
 ) {
     Row(
-        modifier = Modifier.padding(16.dp),
+        modifier = modifier.padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -59,7 +70,7 @@ fun SimpleToDoListScreen(
 )
 @Composable
 private fun TodoItemPreview() {
-    SimpleToDoListScreen(
+    SimpleToDoList(
         modifier = Modifier,
         toDo = ToDo(
             title = "Test title",
@@ -69,6 +80,3 @@ private fun TodoItemPreview() {
         onCheckedListener = {}
     )
 }
-
-data class ToDo(val title: String, val description: String, val isChecked: Boolean)
-
