@@ -1,4 +1,4 @@
-package com.kulk.ani.compose.practice.simple_todo
+package com.kulk.ani.compose.practice.todo.simple
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

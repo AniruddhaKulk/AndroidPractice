@@ -1,4 +1,4 @@
-package com.kulk.ani.compose.practice.simple_todo
+package com.kulk.ani.compose.practice.todo.simple
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
