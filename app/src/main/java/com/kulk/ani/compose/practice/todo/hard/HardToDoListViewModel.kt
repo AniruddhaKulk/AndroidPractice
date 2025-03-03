@@ -7,24 +7,21 @@ import kotlinx.coroutines.flow.update
 
 class HardToDoListViewModel : ViewModel() {
 
-    private var newTitle: String = ""
-    private var newDescription: String = ""
-
     private val _state = MutableStateFlow(TodoList())
     val state = _state.asStateFlow()
 
     fun onAction(action: TodoListAction) {
         when (action) {
             TodoListAction.OnAddClick -> {
-                if (newTitle.isNotBlank()) {
-                    val todo = Todo(newTitle, newDescription, false)
+                if (_state.value.newTitle.isNotBlank()) {
+                    val todo = Todo(_state.value.newTitle, _state.value.newDescription, false)
                     _state.update {
                         it.copy(
-                            todos = it.todos + todo
+                            todos = it.todos + todo,
+                            newTitle = "",
+                            newDescription = ""
                         )
                     }
-                    newTitle = ""
-                    newDescription = ""
                 }
             }
 
@@ -48,8 +45,8 @@ class HardToDoListViewModel : ViewModel() {
                 }
             }
 
-            is TodoListAction.OnDescriptionUpdate -> newDescription = action.description
-            is TodoListAction.OnTitleUpdate -> newTitle = action.title
+            is TodoListAction.OnDescriptionUpdate -> _state.update { it.copy(newDescription = action.description) }
+            is TodoListAction.OnTitleUpdate -> _state.update { it.copy(newTitle = action.title) }
         }
     }
 
@@ -70,5 +67,7 @@ data class TodoList(
         Todo(
             title = "Title $it", description = "Description $it", isChecked = false
         )
-    }
+    },
+    val newTitle: String = "",
+    val newDescription: String = "",
 )
